@@ -6,8 +6,8 @@ from lights import *
 from materials import *
 from math import*
 
-width = 1250
-height = 500
+width = 1500
+height = 650
 pygame.init()
 screen = pygame.display.set_mode((width, height), pygame.DOUBLEBUF | pygame.HWACCEL | pygame.HWSURFACE)
 screen.set_alpha(None)
@@ -16,16 +16,19 @@ raytracer = RayTracer(screen)
 raytracer.envMap = pygame.image.load("cielo.png")
 raytracer.rtClearColor(0.25, 0.25, 0.25)
 
-brick = Material(diffuse=(1, 0.4, 0.4), spec=8, Ks=0.01,matType=TRANSPARENT)
+brick = Material(diffuse=(0, 0, 1), spec=8, Ks=0.01, matType=TRANSPARENT)
+
 grass = Material(diffuse=(0.4, 1, 0.4), spec=32, Ks=0.1,matType=REFLECTIVE)
-water = Material(diffuse=(157/255, 126/255, 61/255), spec=256, Ks=0.2, matType=OPAQUE)
+piel = Material(diffuse=(157/255, 126/255, 61/255), spec=256, Ks=0.2, matType=OPAQUE)
 
 white_opaque = Material(diffuse=(1, 1, 1), spec=256, Ks=0.2, matType=OPAQUE)
-boxTexture=pygame.image.load("color4.jpg")
+boxTexture=pygame.image.load("ros.jpg")
 box=Material(texture=boxTexture)
 mirror = Material(diffuse=(0.9, 0.9, 0.9), spec=64, Ks=0.2, matType=OPAQUE)
 glass = Material(diffuse=(0.9, 0.9, 0.9), spec=64, Ks=0.15, ior=1.5, matType=TRANSPARENT)
-diamond = Material(diffuse=(0.9, 0.9, 0.9), spec=128, Ks=0.2, ior=2.417, matType=TRANSPARENT)
+diamond = Material(diffuse=(0.5, 0.9, 1), spec=128, Ks=0.2, ior=2.417, matType=TRANSPARENT)
+regalo = Material(diffuse=(0.5, 0.9, 1), spec=128, Ks=0.2, ior=2.417, matType=REFLECTIVE)
+
 floor_material = Material(diffuse=(1, 0.4, 0.4), spec=8, Ks=0.01, matType=REFLECTIVE)  # Rojo
 ceiling_material = Material(diffuse=(0.4, 1, 0.4), spec=32, Ks=0.1, matType=REFLECTIVE) # Verde
 front_wall_material = Material(diffuse=(0.4, 0.4, 1), spec=256, Ks=0.2, matType=OPAQUE) # Azul
@@ -55,7 +58,7 @@ def rotation_y_matrix(angle):
 horizontal_body_position = (0, 1, -4)  
 horizontal_body_radii = (0.65, 0.57, 0.7) 
 horizontal_body_material = brick
-raytracer.scene.append(Ellipsoid(position=horizontal_body_position, radii=horizontal_body_radii, material=water))
+raytracer.scene.append(Ellipsoid(position=horizontal_body_position, radii=horizontal_body_radii, material=piel))
 horizontal_body_position1 = (0, 2, -3)  
 horizontal_body_radii1 = (0.256, 0.185, 0.5) 
 horizontal_body_material1 = brick
@@ -83,7 +86,7 @@ raytracer.scene.append(Sphere(position=nose_position, radius=0.05, material=nari
 body_position = (0, -0.75, -4)  
 body_radii = (0.75, 0.8, 1)  
 body_material = brick
-raytracer.scene.append(Ellipsoid(position=body_position, radii=body_radii, material=water))
+raytracer.scene.append(Ellipsoid(position=body_position, radii=body_radii, material=piel))
 white_belly = Material(diffuse=(1, 1, 1), spec=256, Ks=0.2, matType=OPAQUE)
 belly_position = (0, 0, -3.8)  
 
@@ -92,16 +95,16 @@ belly_position = (0, 0, -3.8)
 left_arm_position = (1.8, 7.5, -3.9)  
 left_arm_radii = (0.5/5, 0.25/5, 0.25/5) 
 left_arm_material = brick
-raytracer.scene.append(Ellipsoid(position=left_arm_position, radii=left_arm_radii, material=water))
+raytracer.scene.append(Ellipsoid(position=left_arm_position, radii=left_arm_radii, material=piel))
 
 # Brazo derecho
 right_arm_position = (-1.8, 7.5, -4.1) 
 right_arm_radii = (0.5/5, 0.25/5, 0.25/5) 
 right_arm_material = brick
-raytracer.scene.append(Ellipsoid(position=right_arm_position, radii=right_arm_radii, material=water))
+raytracer.scene.append(Ellipsoid(position=right_arm_position, radii=right_arm_radii, material=piel))
 
-raytracer.scene.append(Ellipsoid(position=(-1.8, 2.5, -4.1), radii=(0.4/5, 0.25/5, 0.25/5), material=water))
-raytracer.scene.append(Ellipsoid(position=(1.8, 2.5, -4.1), radii=(0.4/5, 0.25/5, 0.25/5), material=water))
+raytracer.scene.append(Ellipsoid(position=(-1.8, 2.5, -4.1), radii=(0.4/5, 0.25/5, 0.25/5), material=piel))
+raytracer.scene.append(Ellipsoid(position=(1.8, 2.5, -4.1), radii=(0.4/5, 0.25/5, 0.25/5), material=piel))
 # Parámetros para el OBB
 obb_position = [0, 0.006, 0]  
 obb_size = [0.25, 0.25, 0.25]   
@@ -112,7 +115,7 @@ obb_rotation_matrix = [
 ]
 obb_material = brick 
 
-raytracer.scene.append(OBB(position=obb_position, size=obb_size, rotation_matrix=obb_rotation_matrix, material=obb_material))
+#raytracer.scene.append(OBB(position=obb_position, size=obb_size, rotation_matrix=obb_rotation_matrix, material=obb_material))
 
 
 raytracer.scene.append(Ellipsoid(position=(4, 1, -5), radii=(0.7, 1, 1), material=Material(diffuse=(226/255, 187/255, 192/255), spec=64, Ks=0.2, matType=OPAQUE)))
@@ -150,17 +153,13 @@ v2 = [0, 2.5/4, 0]
 #raytracer.scene.append(triangulo)
 
 
-raytracer.scene.append(OBB(position=[-3.5, -1.25, -4], size=[2, 2, 2], rotation_matrix=[[1, 0, 0], [0, 1, 0], [0, 0, 1]], material=box))
-raytracer.scene.append(OBB(position=[1.5, -1.25, -4], size=[2, 2, 2], rotation_matrix=[[1, 0, 0], [0, 1, 0], [0, 0, 1]], material=Material(diffuse=(226/255, 187/255, 192/255), spec=64, Ks=0.2, matType=OPAQUE)))
+raytracer.scene.append(OBB(position=[-2, -1.25, -4], size=[2, 2, 2], rotation_matrix=[[1, 0, 0], [0, 1, 0], [0, 0, 1]], material=box))
+raytracer.scene.append(OBB(position=[1.5, -1.25, -4], size=[2, 2, 2], rotation_matrix=[[1, 0, 0], [0, 1, 0], [0, 0, 1]], material=box))
 
-cinta_horizontal_position = [obb_position[0], obb_position[1], obb_position[2]]
-cinta_horizontal_size = [obb_size[0], 0.05, 0.05]  
-raytracer.scene.append(OBB(position=cinta_horizontal_position, size=cinta_horizontal_size, rotation_matrix=obb_rotation_matrix, material=white_opaque))
+raytracer.scene.append(AABB(position=(-2.5, -2.8, -7), size=(1,1,1), material=diamond))
+#raytracer.scene.append(AABB(position=(-6.5, -1.2, -7), size=(1.2,1.5,1), material=regalo))
+raytracer.scene.append(AABB(position=(3.5, -2.8, -7), size=(1,1,1), material=diamond))
 
-
-cinta_vertical_position = [obb_position[0], obb_position[1], obb_position[2]]
-cinta_vertical_size = [0.05, obb_size[1], 0.05]  
-raytracer.scene.append(OBB(position=cinta_vertical_position, size=cinta_vertical_size, rotation_matrix=obb_rotation_matrix, material=white_opaque))
 
 
 raytracer.lights.append(AmbientLight(intensity=0.6))
